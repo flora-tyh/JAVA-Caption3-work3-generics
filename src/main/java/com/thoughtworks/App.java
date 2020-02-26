@@ -17,15 +17,16 @@ public class App {
         Student student6 = new Student("5", "冯五");
 
         MemoryRepository memoryRepository = new MemoryRepository(new ArrayList<>(Arrays.asList(student1, student2, student3, student4, student5)));
+        RepositoryUtil repositoryUtil = new RepositoryUtil();
 
         System.out.println(memoryRepository.get("3"));
         System.out.println("=========================");
 
         memoryRepository.delete("4");
-        memoryRepository.list();
+        repositoryUtil.printList(memoryRepository.list());
         System.out.println("=========================");
 
         memoryRepository.update("5", student6);
-        memoryRepository.list();
+        repositoryUtil.printList(memoryRepository.list());
     }
 }

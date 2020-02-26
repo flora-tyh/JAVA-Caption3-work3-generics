@@ -3,69 +3,65 @@ package com.thoughtworks;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class MemoryRepository implements Repository {
-    private ArrayList<Student> students;
+public class MemoryRepository<E> implements Repository<E> {
+    private ArrayList<E> students;
 
     public MemoryRepository() {
     }
 
-    public MemoryRepository(ArrayList<Student> students) {
+    public MemoryRepository(ArrayList<E> students) {
         this.students = students;
     }
 
-    public ArrayList<Student> getStudents() {
+    public ArrayList<E> getStudents() {
         return students;
     }
 
-    public void setStudents(ArrayList<Student> students) {
+    public void setStudents(ArrayList<E> students) {
         this.students = students;
     }
 
     @Override
-    public void save(Object id, Object student) {
-        if (student instanceof Student) {
-            Student realStudent = (Student) student;
-            students.add(realStudent);
-        }
+    public void save(String id, E student) {
+        students.add(student);
     }
 
     @Override
-    public Student get(Object id) {
-        if (id instanceof String) {
-            String realId = (String) id;
-            for (Student student : students) {
-                if (student.getId().equals(realId)) {
-                    return student;
+    public Student get(String id) {
+        for (E student : students) {
+            if (student instanceof Student) {
+                Student stu = (Student) student;
+                if (stu.getId().equals(id)) {
+                    return stu;
                 }
             }
+
         }
         return null;
     }
 
     @Override
-    public void delete(Object id) {
-        if (id instanceof String) {
-            String realId = (String) id;
-            for (Iterator<Student> it = students.iterator(); it.hasNext();) {
-                if (it.next().getId().equals(realId)) {
-                    it.remove();
+    public void delete(String id) {
+        int num = 0;
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i) instanceof Student) {
+                Student stu = (Student) students.get(i);
+                if (stu.getId() == id) {
+                    num = i;
                 }
             }
         }
+        students.remove(num);
     }
 
     @Override
-    public void update(Object id, Object student) {
+    public void update(String id, E student) {
         this.delete(id);
-        if (student instanceof Student) {
-            Student realStudent = (Student) student;
-            students.add(realStudent);
-        }
+            students.add(student);
     }
 
     @Override
-    public void list() {
-        RepositoryUtil repositoryUtil = new RepositoryUtil();
-        repositoryUtil.printList(students);
+    public ArrayList<E> list() {
+        return students;
     }
 }
